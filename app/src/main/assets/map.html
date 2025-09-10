@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Interactive Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        #mapid {
+            height: 100vh;
+            width: 100%;
+            cursor: crosshair;
+        }
+
+        /* Loading indicator */
+        .loading-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: none;
+        }
+
+        /* Disable text selection on map */
+        #mapid {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+<div id="mapid"></div>
+<div id="loading" class="loading-overlay">
+    <div>Loading map...</div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+
+<script>
+    // Show loading indicator
+    document.getElementById('loading').style.display = 'block';
+
+    // Configuration object
+    const mapConfig = {
+        defaultLocation: [28.6139, 77.2090], // Delhi coordinates
+        defaultZoom: 10,
+        maxZoom: 18,
+        minZoom: 3
+    };
+
+    // Initialize the map without zoom controls
+    var map = L.map('mapid', {
+        zoomControl: false,           // Remove zoom buttons
+        attributionControl: true,     // Keep attribution
+        scrollWheelZoom: true,       // Allow mouse wheel zoom
+        doubleClickZoom: true,       // Allow double-click zoom
+        touchZoom: true,             // Allow touch zoom
+        dragging: true,              // Allow map dragging
+        keyboard: true               // Allow keyboard navigation
+    }).setView(mapConfig.defaultLocation, mapConfig.defaultZoom);
+
+    // Add OpenStreetMap tiles with error handling
+    const tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: mapConfig.maxZoom,
+        minZoom: mapConfig.minZoom,
+        errorTileUrl: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk1hcCBub3QgYXZhaWxhYmxlPC90ZXh0Pjwvc3ZnPg=='
+    }).addTo(map);
+
+    // Variables to store markers and state
+    var currentMarker = null;
+    var isMapReady = false;
+
+    // Hide loading indicator when map is ready
+    map.whenReady(function() {
+        document.getElementById('loading').style.display = 'none';
+        isMapReady = true;
+        console.log('Map initialized successfully');
+    });
+
+    // Handle tile loading errors
+    tileLayer.on('tileerror', function(error) {
+        console.warn('Tile loading error:', error);
+    });
+
+    // Custom marker icon
+    const customIcon = L.divIcon({
+        className: 'custom-div-icon',
+        html: "<div style='background-color:#4264fb;width:20px;height:20px;border-radius:50%;border:3px solid white;box-shadow:0 2px 4px rgba(0,0,0,0.3);'></div>",
+        iconSize: [20, 20],
+        iconAnchor: [10, 10]
+    });
+
+    // Add click event listener to the map
+    map.on('click', function(e) {
+        if (!isMapReady) return; // Don't process clicks until map is ready
+
+        var lat = e.latlng.lat;
+        var lng = e.latlng.lng;
+
+        // Validate coordinates
+        if (lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+            console.error('Invalid coordinates:', lat, lng);
+            return;
+        }
+
+        // Remove previous marker if exists
+        if (currentMarker) {
+            map.removeLayer(currentMarker);
+        }
+
+        // Add new marker at clicked location with custom icon (NO POPUP)
+        currentMarker = L.marker([lat, lng], {
+            icon: customIcon,
+            draggable: false
+        }).addTo(map);
+
+        // Send coordinates to Android with error handling
+        try {
+            if (typeof Android !== 'undefined' && Android.onLocationClicked) {
+                Android.onLocationClicked(lat, lng);
+            } else {
+                console.log('Android interface not available. Coordinates:', lat, lng);
+            }
+        } catch (error) {
+            console.error('Error calling Android interface:', error);
+        }
+    });
+
+    // Enhanced function to update map location from Android
+    function updateMapLocation(lat, lng, zoom, showPopup) {
+        if (!isMapReady) {
+            console.warn('Map not ready yet');
+            return;
+        }
+
+        // Validate inputs
+        lat = parseFloat(lat);
+        lng = parseFloat(lng);
+        zoom = zoom || mapConfig.defaultZoom;
+        showPopup = showPopup !== false; // Default to true
+
+        if (isNaN(lat) || isNaN(lng)) {
+            console.error('Invalid coordinates provided');
+            return;
+        }
+
+        // Set map view with smooth animation
+        map.flyTo([lat, lng], zoom, {
+            animate: true,
+            duration: 1.5
+        });
+
+        // Remove previous marker if exists
+        if (currentMarker) {
+            map.removeLayer(currentMarker);
+        }
+
+        // Add marker at new location (NO POPUP)
+        currentMarker = L.marker([lat, lng], {
+            icon: customIcon
+        }).addTo(map);
+
+        // Note: No popup is shown even if showPopup is true
+        // All coordinate display is handled by Android TextViews
+    }
+
+    // Function to clear all markers
+    function clearMarkers() {
+        if (currentMarker) {
+            map.removeLayer(currentMarker);
+            currentMarker = null;
+            console.log('Markers cleared');
+        }
+    }
+
+    // Function to get current map center
+    function getMapCenter() {
+        const center = map.getCenter();
+        return {
+            lat: center.lat,
+            lng: center.lng,
+            zoom: map.getZoom()
+        };
+    }
+
+    // Function to set map bounds
+    function fitToBounds(bounds) {
+        if (!isMapReady) return;
+        map.fitBounds(bounds, { padding: [20, 20] });
+    }
+
+    // Add keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        if (!isMapReady) return;
+
+        switch(e.key) {
+            case 'c':
+            case 'C':
+                if (e.ctrlKey || e.metaKey) {
+                    e.preventDefault();
+                    clearMarkers();
+                }
+                break;
+        }
+    });
+
+    // Prevent context menu on right click
+    map.on('contextmenu', function(e) {
+        e.originalEvent.preventDefault();
+    });
+
+    // Add map state change logging (for debugging)
+    map.on('zoomend moveend', function() {
+        console.log('Map state:', getMapCenter());
+    });
+</script>
+</body>
+</html>
