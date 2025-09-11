@@ -62,6 +62,122 @@
                     />
             </LinearLayout>
 
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:id="@+id/checkboxContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <!-- Header -->
+                    <LinearLayout
+                        android:id="@+id/headerLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Select Soil Properties"
+                            android:textStyle="bold"
+                            android:textSize="16sp"/>
+
+                        <ImageView
+                            android:id="@+id/arrowIcon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/dropdown"/>
+                    </LinearLayout>
+
+                    <!-- Hidden checkboxes -->
+                    <LinearLayout
+                        android:id="@+id/checkboxGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        >
+                        <CheckBox
+                            android:id="@+id/bdod"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Bulk Density"
+                            />
+                        <CheckBox
+                            android:id="@+id/cec"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Clay Content"
+                            />
+                        <CheckBox
+                            android:id="@+id/cfvo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Coarse Fragment"
+                            />
+                        <CheckBox
+                            android:id="@+id/clay"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Sand"
+                            />
+                        <CheckBox
+                            android:id="@+id/nitrogen"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Nitrogen"
+                            />
+                        <CheckBox
+                            android:id="@+id/ocd"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Organic Carbon Density"
+                            />
+                        <CheckBox
+                            android:id="@+id/ocs"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Organic Carbon Stock"
+                            />
+                        <CheckBox
+                            android:id="@+id/phh2o"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="pH water"
+                            />
+                        <CheckBox
+                            android:id="@+id/sand"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Sand Content"
+                            />
+                        <CheckBox
+                            android:id="@+id/silt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Silt Content"
+                            />
+                        <CheckBox
+                            android:id="@+id/soc"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Soil Organic Carbon"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+
             <Button
                 android:id="@+id/btngetdata"
                 android:layout_width="match_parent"

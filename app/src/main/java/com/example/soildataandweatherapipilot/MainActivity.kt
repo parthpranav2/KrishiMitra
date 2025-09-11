@@ -1,11 +1,14 @@
 package com.example.soildataandweatherapipilot
 
 import android.os.Bundle
+import android.view.View
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Button
 import android.widget.ExpandableListView
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.SimpleExpandableListAdapter
 import android.widget.TextView
 import android.widget.Toast
@@ -58,6 +61,20 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
+        val header = findViewById<LinearLayout>(R.id.headerLayout)
+        val checkboxGroup = findViewById<LinearLayout>(R.id.checkboxGroup)
+        val arrowIcon = findViewById<ImageView>(R.id.arrowIcon)
+
+        header.setOnClickListener {
+            if (checkboxGroup.visibility == View.GONE) {
+                checkboxGroup.visibility = View.VISIBLE
+                arrowIcon.setImageResource(R.drawable.windup)
+            } else {
+                checkboxGroup.visibility = View.GONE
+                arrowIcon.setImageResource(R.drawable.dropdown)
+            }
+        }
+
 
         findViewById<Button>(R.id.btngetdata).setOnClickListener {
             if (lat != 0.00 && lon != 0.00) {
@@ -97,7 +114,7 @@ class MainActivity : AppCompatActivity() {
             if (item.size >= 2) {
                 val soilType = item[0].toString()
                 val probability = item[1].toString()
-                soilTypesList.add("$soilType : $probability")
+                soilTypesList.add("$soilType : $probability %")
             }
         }
 
