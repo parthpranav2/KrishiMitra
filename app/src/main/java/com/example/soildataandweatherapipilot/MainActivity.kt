@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
+
         findViewById<Button>(R.id.btngetdata).setOnClickListener {
             if (lat != 0.00 && lon != 0.00) {
                 lifecycleScope.launch {
