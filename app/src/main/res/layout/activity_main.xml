@@ -7,35 +7,41 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <ScrollView
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardWebView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="350dp"
+        android:layout_margin="10dp"
+        android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        tools:visibility="visible">
+
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cardWebView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:padding="10dp"
         >
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardWebView"
-                android:layout_width="match_parent"
-                android:layout_height="400dp"
-                android:layout_margin="10dp"
-                android:visibility="visible"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
-                tools:visibility="visible">
-
-                <WebView
-                    android:id="@+id/webView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-            </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -43,12 +49,13 @@
                 android:orientation="horizontal"
                 android:gravity="center"
                 >
+
                 <TextView
                     android:id="@+id/txtLat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Lat"
-                    />
+                    android:text="Lat" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -70,7 +77,7 @@
                 app:cardElevation="4dp">
 
                 <LinearLayout
-                    android:id="@+id/checkboxContainer"
+                    android:id="@+id/checkboxSoilPropertiesDropDown"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -101,7 +108,7 @@
 
                     <!-- Hidden checkboxes -->
                     <LinearLayout
-                        android:id="@+id/checkboxGroup"
+                        android:id="@+id/soilPropcheckboxGroup"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
@@ -117,7 +124,7 @@
                             android:id="@+id/cec"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Clay Content"
+                            android:text="Carbon Exchange Capacity"
                             />
                         <CheckBox
                             android:id="@+id/cfvo"
@@ -129,7 +136,7 @@
                             android:id="@+id/clay"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Sand"
+                            android:text="Clay Content"
                             />
                         <CheckBox
                             android:id="@+id/nitrogen"
@@ -173,8 +180,193 @@
                             android:layout_height="wrap_content"
                             android:text="Soil Organic Carbon"
                             />
+                        <CheckBox
+                            android:id="@+id/wv0010"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Vol. water content at -10 kPa"
+                            />
+                        <CheckBox
+                            android:id="@+id/wv0033"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Vol. water content at -33 kPa"
+                            />
+                        <CheckBox
+                            android:id="@+id/wv1500"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Vol. water content at -1500 kPa"
+                            />
                     </LinearLayout>
                 </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:id="@+id/checkboxDOIDropDown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <!-- Header -->
+                    <LinearLayout
+                        android:id="@+id/headerLayout2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Depth Of Investigation"
+                            android:textStyle="bold"
+                            android:textSize="16sp"/>
+
+                        <ImageView
+                            android:id="@+id/arrowIcon2"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/dropdown"/>
+                    </LinearLayout>
+
+                    <!-- Hidden checkboxes -->
+                    <LinearLayout
+                        android:id="@+id/dOIcheckboxGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        >
+                        <CheckBox
+                            android:id="@+id/dep0_5"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="0-5cm"
+                            />
+                        <CheckBox
+                            android:id="@+id/dep5_15"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="5-15cm"
+                            />
+                        <CheckBox
+                            android:id="@+id/dep15_30"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="15-30cm"
+                            />
+                        <CheckBox
+                            android:id="@+id/dep30_60"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="30-60cm"
+                            />
+                        <CheckBox
+                            android:id="@+id/dep60_100"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="60-100cm"
+                            />
+                        <CheckBox
+                            android:id="@+id/dep100_200"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="100-200cm"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:id="@+id/checkboxValueDropDown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <!-- Header -->
+                    <LinearLayout
+                        android:id="@+id/headerLayout3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Depth Of Investigation"
+                            android:textStyle="bold"
+                            android:textSize="16sp"/>
+
+                        <ImageView
+                            android:id="@+id/arrowIcon3"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/dropdown"/>
+                    </LinearLayout>
+
+                    <!-- Hidden checkboxes -->
+                    <LinearLayout
+                        android:id="@+id/valuecheckboxGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        >
+                        <CheckBox
+                            android:id="@+id/q_0.5"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Q0.5"
+                            />
+                        <CheckBox
+                            android:id="@+id/q_0.05"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Q0.05"
+                            />
+                        <CheckBox
+                            android:id="@+id/q_0.95"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Q0.95"
+                            />
+                        <CheckBox
+                            android:id="@+id/mean"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Mean"
+                            />
+                        <CheckBox
+                            android:id="@+id/uncertainty"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Uncertainity"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+
             </com.google.android.material.card.MaterialCardView>
 
 
